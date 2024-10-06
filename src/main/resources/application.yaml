@@ -1,0 +1,18 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /identity
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/identity
+    username: postgres
+    password: 12345
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    
+
+jwt:
+  signerKey: "sYxDNGVhHQoLuaRWnZdXgfvET3zVCC1CKUtT/4gCiX/VMBjpZ6lV8vzquyyuljFR"
