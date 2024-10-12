@@ -15,12 +15,13 @@ import com.dev.identityservice.dto.request.UserCreationRequest;
 import com.dev.identityservice.dto.request.UserUpdateRequest;
 import com.dev.identityservice.dto.response.UserResponse;
 import com.dev.identityservice.entity.User;
-import com.dev.identityservice.entity.Enum.Role;
+import com.dev.identityservice.entity.Role;
 import com.dev.identityservice.exception.AppException;
 import com.dev.identityservice.exception.ErrorCode;
 import com.dev.identityservice.mapper.UserMapper;
+import com.dev.identityservice.repository.RoleRepository;
 import com.dev.identityservice.repository.UserRepository;
-
+import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
 @Service
@@ -32,6 +33,9 @@ public class UserService {
 
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    PermissionService permissionService;
+    RoleRepository roleRepository;
+    
 
     public UserResponse createUser(UserCreationRequest request){
 
@@ -43,18 +47,20 @@ public class UserService {
 
         
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        HashSet<String> roles =  new HashSet<>();
-        roles.add(Role.USER.name());
-        // user.setRoles(roles);
+        Set<Role> roles =  new HashSet<>(roleRepository.findAllById(request.getRoles()));
+        // roles.add(Role.USER.name());
+        user.setRoles(roles);
         userRepository.save(user);
         return userMapper.toUserResponse( userRepository.save(user));
     }
 
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(()-> new RuntimeException("user not found"));
+        User user = userRepository.findById(userId).orElseThrow(()-> new AppException(ErrorCode.USER_NOT_EXISTED));
         
         userMapper.updateUser(user, request);
-
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        Set<Role>  roles = new HashSet<>(roleRepository.findAllById(request.getRoles()));
+        user.setRoles(roles);
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
@@ -62,7 +68,8 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    @PreAuthorize("hasRole('ADMIN')") // kiem tra trc roi moi vao ham xac nhan
+    @PreAuthorize("hasRole('ADMIN')")// kiem tra trc roi moi vao ham xac nhan
+    // @PreAuthorize("hasAuthority('create_data')")// kiem tra trc roi moi vao ham xac nhan
     // @PreAuthorize("principal?.isAdmin()")
     public List<UserResponse> getUsers(){
         

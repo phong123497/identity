@@ -25,7 +25,17 @@ public enum ErrorCode {
     private final int  code;
     private final String  meassge;
     private final HttpStatusCode statusCode;
-    
+
+
+    // public static ErrorCode fromMessage(String message) {
+        
+    //     for (ErrorCode errorCode : values()) {
+    //         if (errorCode.getMeassge().contains(message)) {
+    //             return errorCode;
+    //         }
+    //     }
+    //     throw new IllegalArgumentException("No enum constant for message: " + message);
+    // }
     
 
 }

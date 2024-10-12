@@ -19,6 +19,8 @@ import com.dev.identityservice.dto.response.UserResponse;
 import com.dev.identityservice.entity.User;
 import com.dev.identityservice.service.UserService;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 
@@ -30,9 +32,8 @@ import java.util.List;
 public class UserController {
     UserService userService;
 
-
     @PostMapping
-    ApiResponse<UserResponse> createUser(@RequestBody  UserCreationRequest request) {
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.createUser(request))
                 .build();

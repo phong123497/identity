@@ -10,12 +10,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import java.text.ParseException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.dev.identityservice.entity.Enum.Role;
+import com.dev.identityservice.service.AuthenticationService;
+import com.nimbusds.jose.JOSEException;
+
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -28,8 +33,13 @@ public class SecurityConfig {
     
     @Value("${jwt.signerKey}")
     private String signerKey;
+    private AuthenticationService authenticationService;
 
-    private final String [] PUBLIC_ENDPOINTS = {"/users", "/auth/login","/auth/introspect"};
+    public  SecurityConfig (AuthenticationService authenticationService){
+        this.authenticationService = authenticationService;
+    }
+
+    private final String [] PUBLIC_ENDPOINTS = {"/users", "/auth/login","/auth/introspect","/auth/login"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -50,30 +60,43 @@ public class SecurityConfig {
         
         return httpSecurity.build();
     }
-    
+
     /*
         author provider   no dung decoder co hop le khong
         chứa nằng của nó kiểm tra singerKey hợp lệ hay k
-        token có hết hạn hay k, kiểm tra scope, roles , xem có đúng k 
+        token có hết hạn hay k, kiểm tra scope, roles , xem có đúng k , cau hinh mac dinh
     */
     @Bean
     JwtDecoder jwtDecoder(){ 
         SecretKeySpec  secretKeySpec =  new SecretKeySpec(signerKey.getBytes(), "HS512");
-        return NimbusJwtDecoder.withSecretKey(secretKeySpec)
-            .macAlgorithm(MacAlgorithm.HS512)
-            .build();
+
+        JwtDecoder jwtDecoder =   NimbusJwtDecoder.withSecretKey(secretKeySpec).macAlgorithm(MacAlgorithm.HS512).build();
+        //　custom decoder
+        return  new JwtDecoder() {
+            @Override
+            public Jwt decode(String token) throws JwtException {
+                try {
+                    authenticationService.verifyToken(token);
+                    Jwt jwt = jwtDecoder.decode(token);
+                    return jwt;
+                } catch (JOSEException | ParseException e) {
+                     throw new JwtException(e.getMessage());
+                }
+            }
+        };
     }
 
     /*
      * converter 
      */
     @Bean
-    JwtAuthenticationConverter jwtAuthenticationConverter(){
+    JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_"); //set tiền tố mặc định từ scope -> role admin
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-        return  jwtAuthenticationConverter;
+
+        return jwtAuthenticationConverter;
     }
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -15,11 +15,13 @@ import java.util.List;
 @Component
 @Mapper(componentModel = "spring")// khai bao cho srping  biet su dung no  là kiểu dependece ịnection
 public interface UserMapper {
+    @Mapping(target = "roles" , ignore = true)
     User toUser(UserCreationRequest request);
 
     @Mapping(target = "lastName", source = "lastName")
     UserResponse toUserResponse(User request);
-     
+    
+    @Mapping(target = "roles" , ignore = true)
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
 
     public List<UserResponse> toUserResponse(List<User> users) ;

@@ -12,6 +12,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Set;
+
+import com.dev.identityservice.validator.DobConstraint;
+
 import java.time.LocalDate;
 
 @Data
@@ -32,8 +35,9 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-    private LocalDate dob;
 
+    // @DobConstraint(min = 10, message = "INVALID_DOB" )
+    private LocalDate dob;
     @ManyToMany
     Set<Role> roles;
    
