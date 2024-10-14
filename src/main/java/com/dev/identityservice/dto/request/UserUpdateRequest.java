@@ -1,6 +1,7 @@
 package com.dev.identityservice.dto.request;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,4 +17,5 @@ public class UserUpdateRequest {
     private String firstName;
     private String lastName;
     private LocalDate dob;
+    List<String> roles;
 }

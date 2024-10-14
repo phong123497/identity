@@ -6,6 +6,7 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/identity
+    driverClassName: "org.postgresql.Driver"
     username: postgres
     password: 12345
   jpa:
@@ -16,3 +17,5 @@ spring:
 
 jwt:
   signerKey: "sYxDNGVhHQoLuaRWnZdXgfvET3zVCC1CKUtT/4gCiX/VMBjpZ6lV8vzquyyuljFR"
+  validDuration: 20 # in second
+  refreshableDuration: 60 # in seconds

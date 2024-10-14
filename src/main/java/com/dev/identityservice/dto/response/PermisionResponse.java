@@ -1,6 +1,5 @@
 package com.dev.identityservice.dto.response;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,10 +1,9 @@
 package com.dev.identityservice.entity;
 
-import java.util.Set;
+import java.util.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -17,14 +16,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "role")
-public class Role {
-
+@Table(name = "invalidatedToken")
+public class InvalidatedToken {
     @Id
-    private String name;
+    private String id;
 
-    private String description;
-
-    @ManyToMany
-    Set<Permission> permissions;
+    private Date expiryTime;
 }
