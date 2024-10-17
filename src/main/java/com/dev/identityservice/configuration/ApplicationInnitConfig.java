@@ -21,20 +21,22 @@ import lombok.extern.slf4j.Slf4j;
 public class ApplicationInnitConfig {
 
     private final PasswordEncoder passwordEncoder; // Ensure this is final and injected
+    private static final String ADMIN_USER = "admin";
+    String passWordAdmin = "admin";
 
     @Bean
     @ConditionalOnProperty(
             prefix = "spring",
             value = "datasource.driverClassName",
-            havingValue = "org.postgresql.Driver")
+            havingValue = "com.mysql.cj.jdbc.Driver")
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
-            if (userRepository.findByUsername("admin").isEmpty()) {
+            if (userRepository.findByUsername(ADMIN_USER).isEmpty()) {
                 var roles = new HashSet<String>();
-                roles.add(Role.ADMIN.name().toString());
+                roles.add(Role.ADMIN.toString());
                 User user = User.builder()
-                        .username("admin")
-                        .password(passwordEncoder.encode("admin"))
+                        .username(ADMIN_USER)
+                        .password(passwordEncoder.encode(passWordAdmin))
                         // .roles(roles)
                         .build();
 

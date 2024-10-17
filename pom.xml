@@ -8,7 +8,7 @@
 		<version>3.2.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.devteria</groupId>
+	<groupId>com.dev</groupId>
 	<artifactId>identity-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>identity-service</name>
@@ -25,11 +25,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -157,14 +157,15 @@
 						</importOrder>
 					</java>
 				</configuration>
-				<!--				<executions>-->
-				<!--					<execution>-->
-				<!--						<phase>compile</phase>-->
-				<!--						<goals>-->
-				<!--							<goal>check</goal>-->
-				<!--						</goals>-->
-				<!--					</execution>-->
-				<!--				</executions>-->
+					<executions>
+						<!-- <execution> -->
+							<!-- <id>fit-error</id>
+							<phase>compile</phase>
+							<goals>
+								<goal>apply</goal>
+							</goals> -->
+						<!-- </execution> -->
+					</executions>
 			</plugin>
 
 		</plugins>

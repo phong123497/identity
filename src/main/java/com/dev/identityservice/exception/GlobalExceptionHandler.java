@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
 
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         apiResponse.setCode(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode());
-        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMeassge());
+        apiResponse.setMessage(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage());
 
         return ResponseEntity.badRequest().body(apiResponse);
     }
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = exception.getErrorCode();
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMeassge());
+        apiResponse.setMessage(errorCode.getMessage());
         return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
     }
 
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
         ApiResponse<Object> apiResponse = new ApiResponse<>();
         apiResponse.setCode(errorCode.getCode());
-        apiResponse.setMessage(errorCode.getMeassge());
+        apiResponse.setMessage(errorCode.getMessage());
         return ResponseEntity.status(errorCode.getStatusCode()).body(apiResponse);
     }
 
@@ -73,8 +73,8 @@ public class GlobalExceptionHandler {
         apiResponse.setCode(errorCode.getCode());
         apiResponse.setMessage(
                 Objects.nonNull(attributes)
-                        ? mapAttribute(errorCode.getMeassge(), attributes)
-                        : errorCode.getMeassge());
+                        ? mapAttribute(errorCode.getMessage(), attributes)
+                        : errorCode.getMessage());
 
         return ResponseEntity.badRequest().body(apiResponse);
     }

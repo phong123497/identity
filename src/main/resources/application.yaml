@@ -5,9 +5,13 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/identity
-    driverClassName: "org.postgresql.Driver"
-    username: postgres
+#    url: jdbc:postgresql://localhost:5432/identity
+#    driverClassName: "org.postgresql.Driver"
+#    username: postgres
+#    password: 12345
+    url: jdbc:mysql://localhost:3307/identity-service
+    driverClassName: "com.mysql.cj.jdbc.Driver"
+    username: root
     password: 12345
   jpa:
     hibernate:
@@ -17,5 +21,5 @@ spring:
 
 jwt:
   signerKey: "sYxDNGVhHQoLuaRWnZdXgfvET3zVCC1CKUtT/4gCiX/VMBjpZ6lV8vzquyyuljFR"
-  validDuration: 20 # in second
-  refreshableDuration: 60 # in seconds
+  validDuration: 36000 # in second
+  refreshableDuration: 360000 # in seconds
